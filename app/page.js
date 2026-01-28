@@ -9,7 +9,13 @@ export default function Page() {
       <p>
         <strong>Week 2:</strong>{' '}
         <Link href="/week-2">
-          Week 2 Assignments Page
+          Week 2
+        </Link>
+      </p>
+      <p>
+        <strong>Week 3:</strong>{' '}
+        <Link href="/week-3">
+          Week 3
         </Link>
       </p>
 
