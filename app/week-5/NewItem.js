@@ -19,7 +19,10 @@ export default function NewItem() {
     setCategory("produce");
   }
   return (
-    <form className="p-4 bg-gray-100 rounded-lg shadow-md dark:bg-gray-800" onSubmit={handleSubmit}>
+    <form
+      className="p-4 bg-gray-100 rounded-lg shadow-md dark:bg-gray-800 max-w-xl mx-auto"
+      onSubmit={handleSubmit}
+    >
       <h2 className="text-xl font-bold mb-2 dark:text-gray-200">New Item</h2>
       <div className="mb-2">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name:</label>
@@ -32,7 +35,7 @@ export default function NewItem() {
         />
       </div>
       <div className="mb-2 flex flex-row space-x-4">
-        <div className="mb-2">
+        <div className="mb-2 w-full">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Quantity:
           </label>
@@ -45,7 +48,7 @@ export default function NewItem() {
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
           />
         </div>
-        <div className="mb-2">
+        <div className="mb-2 w-full">
           <label className="block text-sm font-medium text-gray-700">
             Category:
           </label>
@@ -70,10 +73,8 @@ export default function NewItem() {
       </div>
       <button
         type="submit"
-        className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mx-auto block w-full"
         label="+">
-            +
-        </button>
-    </form>
-  );
+        +
+      </button> </form>);
 }
