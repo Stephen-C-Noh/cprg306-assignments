@@ -20,7 +20,7 @@ export default function ItemList({ items }) {
     categories.forEach((cat) => groupedItems[cat].sort((a, b) => a.name.localeCompare(b.name)));
 
     return (
-      <div>
+      <div className="mt-6">
         <div className="flex gap-2 mb-4">
           <button className={`${buttonBase} ${sortBy === "name" ? activeStyle : inactiveStyle}`} onClick={() => setSortBy("name")}>Sort by Name</button>
           <button className={`${buttonBase} ${sortBy === "category" ? activeStyle : inactiveStyle}`} onClick={() => setSortBy("category")}>Sort by Category</button>
