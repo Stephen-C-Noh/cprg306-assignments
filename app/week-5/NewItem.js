@@ -5,6 +5,19 @@ export default function NewItem() {
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [category, setCategory] = useState("produce");
+  const categryOptions = [
+    "produce",
+    "dairy",
+    "bakery",
+    "meat",
+    "frozen foods",
+    "canned goods",
+    "dry goods",
+    "beverages",
+    "snacks",
+    "household",
+    "other"
+  ];
   function handleSubmit(e) {
     e.preventDefault();
     // Create Object: create an item object with the current name, quantity, and category.
@@ -25,8 +38,10 @@ export default function NewItem() {
     >
       <h2 className="text-xl font-bold mb-2 dark:text-gray-200">New Item</h2>
       <div className="mb-2">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name:</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="name">Name:</label>
         <input
+          id="name"
+          name="name"
           type="text"
           value={name}
           required={true}
@@ -36,11 +51,13 @@ export default function NewItem() {
       </div>
       <div className="mb-2 flex flex-row space-x-4">
         <div className="mb-2 w-full">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="name">
             Quantity:
           </label>
           <input
+            id="quantity"
             type="number"
+            name="quantity"
             min={1}
             max={99}
             value={quantity}
@@ -49,15 +66,22 @@ export default function NewItem() {
           />
         </div>
         <div className="mb-2 w-full">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="category">
             Category:
           </label>
           <select
+            id="category"
+            name="category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           >
-            <option value="produce">Produce</option>
+            {categryOptions.map((category) => (
+              <option key={category} value={category}>
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </option>
+            ))}
+            {/* <option value="produce">Produce</option>
             <option value="dairy">Dairy</option>
             <option value="bakery">Bakery</option>
             <option value="meat">Meat</option>
@@ -67,7 +91,7 @@ export default function NewItem() {
             <option value="beverages">Beverages</option>
             <option value="snacks">Snacks</option>
             <option value="household">Household</option>
-            <option value="other">Other</option>
+            <option value="other">Other</option> */}
           </select>
         </div>
       </div>
