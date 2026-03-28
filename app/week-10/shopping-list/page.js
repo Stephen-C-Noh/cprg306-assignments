@@ -21,7 +21,7 @@ export default function Page() {
   // const [items, setItems] = useState(getItems(user));
   // Reason: getItems is async, so this creates the wrong state shape.
   // Target behavior: initialize items as an empty array, then load asynchronously.
-  
+  const [items, setItems] = useState([]);
   const [selectedIngredient, setSelectedIngredient] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
@@ -35,13 +35,40 @@ export default function Page() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (user != null){
+      loadItems(user);
+    }
+  }, [user]);
+
   function handleSelectedItem(name) {
     setSelectedIngredient(name);
     setIsModalOpen(true);
   }
 
-  function handleAddItem(newItem) {
-    setItems([...items, newItem]);
+  async function handleAddItem(newItem) {
+    if (!user) return;
+    const {id:_localUUID, ...itemForDb} = newItem;
+    try{
+      const newDocId = await addItem(user.uid, itemForDb);
+      if (newDocId == null) return;
+      const savedItem = {id:newDocId, ...itemForDb};
+      setItems((prevItems) => [...prevItems, savedItem]);
+    } catch (error){
+      console.log("Failed to add the item.", error);
+    }    
+  }
+
+  async function loadItems(user) {
+    if (!user) return;
+    let loadedItems = [];
+    try{
+      loadedItems = await getItems(user.uid);
+    }catch (error){
+      console.log("failed to load items from db.", error);
+      return null;
+    }
+    setItems(loadedItems);
   }
 
   return (

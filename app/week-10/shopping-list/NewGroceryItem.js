@@ -21,16 +21,9 @@ export default function NewGroceryItem({onAddItem}) {
   ];
   function handleSubmit(e) {
     e.preventDefault();
-    // Create Object: create an item object with the current name, quantity, and category.
     const id = crypto.randomUUID();
     const newItem = { id, name, quantity, category };
-    // log the item
-    console.log("New Item:", newItem);
-    // User feedback: call alert() to display the detail of created item >> Previous weeks
-    // alert(`Item Added:\nName: ${name}\nQuantity: ${quantity}\nCategory: ${category}`); >> Previous weeks
-    //  Replace the alert() with a call to onAddItem(item) on form submit
     onAddItem(newItem);
-    // Reset form fields
     setName("");
     setQuantity(1);
     setCategory("produce");
@@ -85,17 +78,7 @@ export default function NewGroceryItem({onAddItem}) {
                 {category.charAt(0).toUpperCase() + category.slice(1)}
               </option>
             ))}
-            {/* <option value="produce">Produce</option>
-            <option value="dairy">Dairy</option>
-            <option value="bakery">Bakery</option>
-            <option value="meat">Meat</option>
-            <option value="frozen foods">Frozen Foods</option>
-            <option value="canned goods">Canned Goods</option>
-            <option value="dry goods">Dry Goods</option>
-            <option value="beverages">Beverages</option>
-            <option value="snacks">Snacks</option>
-            <option value="household">Household</option>
-            <option value="other">Other</option> */}
+            
           </select>
         </div>
       </div>
