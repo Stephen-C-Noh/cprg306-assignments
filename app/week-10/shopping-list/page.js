@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useUserAuth } from "@/contexts/AuthContext";
 import GroceryItemList from "./GroceryItemList";
 import NewGroceryItem from "./NewGroceryItem";
-import itemsData from "./grocery-items.json";
+import { getItems, addItem } from "../_services/shopping-list-service";
 import MealIdeas from "./MealIdeas";
 import Link from "next/link";
 
@@ -18,7 +18,10 @@ export default function Page() {
     }
   }, [user]);
 
-  const [items, setItems] = useState(itemsData);
+  // const [items, setItems] = useState(getItems(user));
+  // Reason: getItems is async, so this creates the wrong state shape.
+  // Target behavior: initialize items as an empty array, then load asynchronously.
+  
   const [selectedIngredient, setSelectedIngredient] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
