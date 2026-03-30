@@ -59,10 +59,21 @@ export default function Page() {
     if (!user) return;
     const {id:_localUUID, ...itemForDb} = newItem;
     try{
-      const newDocId = await addItem(user.uid, itemForDb);
-      if (newDocId == null) return;
-      const savedItem = {id:newDocId, ...itemForDb};
-      setItems((prevItems) => [...prevItems, savedItem]);
+      const result = await addItem(user.uid, itemForDb);
+      if (!result) return;
+
+      if (result.action === "created") {
+        const savedItem = {id: result.id, ...result.item};
+        setItems((prevItems) => [...prevItems, savedItem]);
+      }
+      if (result.action === "merged") {
+        setItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === result.id ? { ...item, quantity: result.quantity } : item
+          )
+        );
+      }
+      
     } catch (error){
       console.log("Failed to add the item.", error);
     }    

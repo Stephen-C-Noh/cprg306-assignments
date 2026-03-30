@@ -1,6 +1,15 @@
 import { db } from "@/app/utils/firebase"
-import {collection, getDocs, addDoc, query, doc, deleteDoc} from "firebase/firestore";
+import {collection, getDocs, addDoc, query, doc, deleteDoc, updateDoc} from "firebase/firestore";
 
+
+function normalizeItemName(value = "") {
+  return value
+    .normalize("NFKC") // normalize Unicode variants
+    .toLowerCase()
+    .replace(/\p{Extended_Pictographic}/gu, "") // remove emojis
+    .replace(/\s+/g, " ") // collapse repeated spaces
+    .trim();
+}
 
 /*
 async getItems function retrieves all items for a specific user from Firestore. 
@@ -42,10 +51,37 @@ and then adds the item to this subcollection. It returns the id of the newly cre
 */
 export async function addItem(userId, item){
   if (!userId) throw new Error("Missing User ID.");
+  const normalizedNewName = normalizeItemName(item?.name?? "");
+  if (!normalizedNewName) throw new Error("Item name cannot be empty.");
+
+  const newCategory = String(item?.category ?? "").trim().toLowerCase();
+  const newQuantity = parseInt(item?.quantity) || 1;
+  
   try{
-    const itemRef = collection(db, "users", userId, "items");
-    const result = await addDoc(itemRef, item);
-    return result.id;
+    const existingItem = await getItems(userId);
+
+    const duplicate = existingItem.find((existing) => {
+      const existingName = normalizeItemName(existing?.name?? "");
+      const existingCategory = String(existing?.category ?? "").trim().toLowerCase();
+      return existingName === normalizedNewName && existingCategory === newCategory;
+    });
+    
+    if (!duplicate) {
+      const payload = {...item, quantity: newQuantity};
+      const result = await addDoc(collection(db, "users", userId, "items"), payload);
+      return {action: "created", id: result.id, item: payload,}; 
+    }
+    const mergedQuantity = (parseInt(duplicate.quantity) || 0) + newQuantity;
+
+    await updateDoc(doc(db, "users", userId, "items", duplicate.id), {
+      quantity: mergedQuantity,
+    });
+
+    return {
+      action: "merged",
+      id: duplicate.id,
+      quantity: mergedQuantity,
+    };
   } catch (error) {
     console.error("Error adding item.", error);
     return null;
