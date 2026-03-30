@@ -1,5 +1,5 @@
 import { db } from "@/app/utils/firebase"
-import {collection, getDocs, addDoc, query} from "firebase/firestore";
+import {collection, getDocs, addDoc, query, doc, deleteDoc} from "firebase/firestore";
 
 
 /*
@@ -49,5 +49,20 @@ export async function addItem(userId, item){
   } catch (error) {
     console.error("Error adding item.", error);
     return null;
+  }
+}
+
+// Week-10 Extra: Delete an item from the shopping list in Firestore
+
+export async function deleteItem(userId, itemId){
+  if (!userId) throw new Error("Missing User ID.");
+  if (!itemId) throw new Error("Missing Item ID.");
+  try{
+    const itemRef = doc(db, "users", userId, "items", itemId);
+    await deleteDoc(itemRef);
+    return true;
+  } catch (error) {
+    console.error("Error deleting item.", error);
+    return false;
   }
 }

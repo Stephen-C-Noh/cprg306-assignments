@@ -2,7 +2,7 @@
 import { useState } from "react";
 import GroceryItem from "./GroceryItem";
 
-export default function GroceryItemList({ items, onSelectItem=() => {handleSelectedItem} }) {
+export default function GroceryItemList({ items, onSelectItem=() => {}, onDeleteItem=() => {}}) {
   const [sortBy, setSortBy] = useState("name");
 
   const buttonBase = "px-3 py-1 rounded-md text-sm font-medium";
@@ -45,6 +45,7 @@ export default function GroceryItemList({ items, onSelectItem=() => {handleSelec
                     let nameBeforeComma = extractName(item.name);
                     if (onSelectItem) onSelectItem(nameBeforeComma);
                   }}
+                  onDeleteItem={() => {if (onDeleteItem) onDeleteItem(item.id)}}
                 />
               ))}
             </ul>
@@ -75,6 +76,7 @@ export default function GroceryItemList({ items, onSelectItem=() => {handleSelec
               console.log(nameBeforeComma);
               if (onSelectItem) onSelectItem(nameBeforeComma);
             }}
+            onDeleteItem={() => {if (onDeleteItem) onDeleteItem(item.id)}}
           />
         ))}
       </ul>

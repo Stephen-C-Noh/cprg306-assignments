@@ -4,9 +4,10 @@ import { useRouter } from "next/navigation";
 import { useUserAuth } from "@/contexts/AuthContext";
 import GroceryItemList from "./GroceryItemList";
 import NewGroceryItem from "./NewGroceryItem";
-import { getItems, addItem } from "../_services/shopping-list-service";
+import { getItems, addItem, deleteItem } from "../_services/shopping-list-service";
 import MealIdeas from "./MealIdeas";
 import Link from "next/link";
+
 
 export default function Page() {
   const { user, firebaseSignOut } = useUserAuth();
@@ -67,6 +68,24 @@ export default function Page() {
     }    
   }
 
+  /*
+  Week-10 Extra: Implement item deletion in the UI by calling 
+  the deleteItem function from the shopping-list-service.
+  After successfully deleting the item from Firestore, 
+  update the local state to remove the deleted item from the list.
+  */
+  async function handleDeleteItem(itemId){
+    if (!user) return;
+    if (!itemId) return;
+    try{
+      const success = await deleteItem(user.uid, itemId);
+      if (!success) return;
+      setItems((prevItems) => prevItems.filter(item => item.id !== itemId));
+    } catch (error){
+      console.log("Failed to delete the item.", error);
+    }
+  }
+
   async function loadItems(user) {
     if (!user) return;
     let loadedItems = [];
@@ -117,7 +136,7 @@ export default function Page() {
           </div>
         </div>
         <NewGroceryItem onAddItem={handleAddItem} />
-        <GroceryItemList items={items} onSelectItem={handleSelectedItem} />
+        <GroceryItemList items={items} onSelectItem={handleSelectedItem} onDeleteItem={handleDeleteItem} />
       </main>
 
       {isModalOpen && (
