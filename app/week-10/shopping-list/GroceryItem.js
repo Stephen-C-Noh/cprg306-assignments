@@ -85,7 +85,8 @@ export default function GroceryItem({
             </button>
             <button
               type="button"
-              className="block w-full px-3 py-2 text-left text-gray-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+              disabled={true} // Disable until modify logic is implemented
+              className="block w-full px-3 py-2 text-left text-gray-600 hover:bg-red-50 dark:hover:bg-red-900/20 line-through cursor-not-allowed"
               onClick={handleModify}
               
             >
