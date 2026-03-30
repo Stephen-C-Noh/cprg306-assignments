@@ -16,7 +16,7 @@ export default function Page() {
     if (user == null) {
       router.push("/week-10");
     }
-  }, [user]);
+  }, [user, router]);
 
   // const [items, setItems] = useState(getItems(user));
   // Reason: getItems is async, so this creates the wrong state shape.
@@ -40,6 +40,14 @@ export default function Page() {
       loadItems(user);
     }
   }, [user]);
+
+  async function handleSignOut() {
+    try {
+      await firebaseSignOut();
+    } catch (error) {
+      console.error("Sign-out failed:", error);
+    }
+  }
 
   function handleSelectedItem(name) {
     setSelectedIngredient(name);
@@ -101,7 +109,7 @@ export default function Page() {
               Profile
             </Link>
             <button
-              onClick={() => firebaseSignOut()}
+              onClick={handleSignOut}
               className="border border-red-300 text-red-600 hover:bg-red-50 font-medium py-2 px-4 rounded-lg transition-colors"
             >
               Sign Out

@@ -15,24 +15,35 @@ export default function Page() {
     if (user) {
       router.push("/week-10/shopping-list");
     }
-  }, [user]);
+  }, [user, router]);
 
 // Sign in to Firebase with GitHub authentication
 async function handleSignIn() {
-  await gitHubSignIn();
-  sessionStorage.setItem("justLoggedIn", "true");
+  try {
+    await gitHubSignIn();
+    sessionStorage.setItem("justLoggedIn", "true");
+  } catch (error) {
+    console.error("GitHub sign-in failed:", error);
+  }
 }
 
 // Sign in to Firebase with Google authentication
 async function handleGoogleSignIn() {
-  await googleSignIn();
-  sessionStorage.setItem("justLoggedIn", "true");
+  try {
+    await googleSignIn();
+    sessionStorage.setItem("justLoggedIn", "true");
+  } catch (error) {
+    console.error("Google sign-in failed:", error);
+  }
 }
 
- 
 // Sign out of Firebase
 async function handleSignOut() {
-  await firebaseSignOut();  
+  try {
+    await firebaseSignOut();
+  } catch (error) {
+    console.error("Sign-out failed:", error);
+  }
 }
 
   return (
